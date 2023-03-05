@@ -2,7 +2,39 @@
 
 {% block content %}
 
+<br/><br/>
+<form action="/addTodoItem/" method= "post">
+  {% csrf_token %}
+  <input type="text" name="content" placeholder="write here what to do">
+  <input type="submit" value="Add Todo Item">
+</form>
 <br/>
 <h2>To do list</h2>
-
+<br/>
+<div style="max-width: 400px;">
+  <div class="list-group">
+    {% for i in all_items %} 
+      {% if not i.done %}
+        <form action="/completeTodoItemView/{{i.id}}/" method= "post">
+          {% csrf_token %}
+          <button type="submit" class="list-group-item list-group-item-action">{{ i.content }}</button>
+        </form>  
+      {% endif %}
+    {% endfor %}
+  </div>
+  <br/>
+  <h2>Completed tasks</h2>
+  <br/>
+  <div class="list-group">
+    {% for i in all_items %} 
+      {% if i.done %}
+        <form action="/deleteTodoItem/{{i.id}}/" method= "post">
+          {% csrf_token %}
+          <button type="submit" class="list-group-item list-group-item-action">{{ i.content }}</button>
+        </form>  
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+ 
 {% endblock %}
