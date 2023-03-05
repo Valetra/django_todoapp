@@ -22,3 +22,10 @@ def completeTodoItemView(request, i):
     y.done = True
     y.save()
     return HttpResponseRedirect('/')
+
+def deleteAllCompletedItemsView(request):
+    all_todo_items = TodoListItem.objects.all()
+    for i in all_todo_items:
+        if i.done:
+            i.delete()
+    return HttpResponseRedirect('/')

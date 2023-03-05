@@ -4,11 +4,13 @@ from .views import (
     addTodoView,
     deleteTodoView,
     completeTodoItemView,
+    deleteAllCompletedItemsView,
 )
 
 urlpatterns = [
     path('', todoappView),
     path('addTodoItem/', addTodoView),
     path('deleteTodoItem/<int:i>/', deleteTodoView),
-    path('completeTodoItemView/<int:i>/', completeTodoItemView)
+    path('completeTodoItemView/<int:i>/', completeTodoItemView),
+    path('deleteAllCompletedItems/', deleteAllCompletedItemsView),
 ]
