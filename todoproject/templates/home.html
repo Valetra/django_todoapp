@@ -3,50 +3,52 @@
 {% block content %}
 {% if not user.is_authenticated %}
   <br/><br/>
-  <a class="btn btn-primary" href="{% url 'register' %}" role="button">Register</a>
-  <a class="btn btn-info" href="{% url 'login' %}" role="button">Login</a>
+  <h2>To do app</h2>
+  <hr/>
+  <a class="btn btn-outline-secondary" href="{% url 'register' %}" role="button">Register</a>
+  <a class="btn btn-outline-light" href="{% url 'login' %}" role="button">Login</a>
 {% else %}
-<br/><br/>
-<a class="btn btn-dark" href="{% url 'logout' %}" role="button">Logout</a>
   <br/><br/>
+  <a class="btn btn-outline-secondary" href="{% url 'logout' %}" role="button">Logout</a>
+  <hr/>
   <form action="/addTodoItem/" method= "post">
     {% csrf_token %}
     <input type="text" name="content" placeholder="write here what to do" required>
     <button type="submit" class="btn btn-primary">Add Todo Item</button>
   </form>
-  <br/>
-  <h2>To do list</h2>
-  <br/>
-  <div style="width: auto;">
-    <div class="list-group">
-      {% for i in all_items %} 
-        {% if not i.done %}
-          <form action="/completeTodoItemView/{{i.id}}/" method= "post">
-            {% csrf_token %}
-            <button type="submit" class="list-group-item list-group-item-action list-group-item-primary">{{ i.content }}</button>
-          </form>  
-        {% endif %}
-      {% endfor %}
+    <br/>
+    <h2>To do list</h2>
+    <br/>
+    <div style="width: auto;">
+      <div class="list-group">
+        {% for i in all_items %} 
+          {% if not i.done and user == i.user %}
+            <form action="/completeTodoItemView/{{i.id}}/" method= "post">
+              {% csrf_token %}
+              <button type="submit" class="list-group-item list-group-item-action list-group-item-primary">{{ i.content }}</button>
+            </form>  
+          {% endif %}
+        {% endfor %}
+      </div>
+      <br/>
+      <h2>Completed tasks</h2>
+      <br/>
+      <p>Click to delete any completed task:</p>
+      <div class="list-group">
+        {% for i in all_items %} 
+          {% if i.done %}
+            <form action="/deleteTodoItem/{{i.id}}/" method= "post">
+              {% csrf_token %}
+              <button type="submit" class="list-group-item list-group-item-action list-group-item-info">{{ i.content }}</button>
+            </form>  
+          {% endif %}
+        {% endfor %}
+      </div>
+      <br/>
+      <form action="deleteAllCompletedItems/" method= "post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete all completed tasks</button>
+      </form>
     </div>
-    <br/>
-    <h2>Completed tasks</h2>
-    <br/>
-    <p>Click to delete any completed task:</p>
-    <div class="list-group">
-      {% for i in all_items %} 
-        {% if i.done %}
-          <form action="/deleteTodoItem/{{i.id}}/" method= "post">
-            {% csrf_token %}
-            <button type="submit" class="list-group-item list-group-item-action list-group-item-info">{{ i.content }}</button>
-          </form>  
-        {% endif %}
-      {% endfor %}
-    </div>
-    <br/>
-    <form action="deleteAllCompletedItems/" method= "post">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-danger">Delete all completed tasks</button>
-    </form>
-  </div>
 {% endif %} 
 {% endblock %}

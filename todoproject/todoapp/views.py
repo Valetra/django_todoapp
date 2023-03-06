@@ -8,8 +8,9 @@ def todoappView(request):
 
 def addTodoView(request):
     x = request.POST['content']
-    new_item = TodoListItem(content = x)
+    new_item = TodoListItem(content = x, user= request.user)
     new_item.save()
+
     return HttpResponseRedirect('/') 
 
 def deleteTodoView(request, i):
