@@ -8,7 +8,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', todoappView),
+    path('', todoappView, name='home'),
     path('addTodoItem/', addTodoView),
     path('deleteTodoItem/<int:i>/', deleteTodoView),
     path('completeTodoItemView/<int:i>/', completeTodoItemView),
